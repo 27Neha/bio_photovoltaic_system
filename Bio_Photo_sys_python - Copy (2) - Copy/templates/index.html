@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biophotonix</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --accent-color: #8bc34a;
+            --dark-color: #1b5e20;
+            --light-color: #c8e6c9;
+            --text-color: #333;
+            --background-color: #f5f5f5;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --hero-yellow: #f5b701;
+            --glass-bg: rgba(255,255,255,0.07);
+            --hero-dark: rgba(12, 60, 18, 0.9);
+        }
+        /* larger hero title and styles */
+        .hero-title {
+            font-size: 72px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 18px;
+            font-weight: 400;
+        }
+        .hero-desc {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            max-width: 720px;
+            margin: 12px auto 24px auto;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+        .hero-cta {
+            background-color: var(--hero-yellow);
+            color: #0b2a1a;
+            border-radius: 8px;
+            padding: 12px 28px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .hero-cta:hover { transform: translateY(-3px); }
+
+        .welcome-screen > * { position: relative; z-index: 2; }
+
+        /* Hero cards (features) */
+        .hero-cards-container { z-index: 2; display: flex; justify-content:center; gap:24px; width:100%; margin-top:36px }
+        .hero-card { background: rgba(255,255,255,0.07); padding: 18px 24px; border-radius: 12px; width: 240px; backdrop-filter: blur(6px); box-shadow: 0 10px 30px rgba(0,0,0,0.08);}
+        .hero-card h3{ margin:12px 0 6px 0; color:#fff; font-size:18px }
+        .hero-card p { color: rgba(255,255,255,0.9); margin:0; font-size:14px }
+        .hero-card-icon { font-size:30px; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* old large logo removed; small logo defined later */
+
+        .tagline {
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* City Input Screen */
+        .city-input-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            background-color: #e9f7ff;
+        }
+        .city-panel {
+            max-width: 760px;
+            width: 100%;
+            background: #fff;
+            border-radius: 12px;
+            padding: 36px;
+            box-shadow: 0 10px 30px rgba(10, 40, 60, 0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .city-title { font-size: 34px; margin:0 0 8px 0; color: #233; text-align:center }
+        .city-subtitle { text-align:center; color:#52606d; margin-bottom:20px }
+        .search-row { display:flex; gap:12px; align-items:center; margin-bottom:18px }
+        .search-input {
+            flex:1; padding:14px 16px; border-radius: 8px; border: 1px solid #e6eef8; font-size:16px; background:#f8fcff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+        .search-btn { padding: 12px 18px; background: #4caf50; color: #fff; border-radius:8px; border:none; cursor:pointer }
+        .or-divider { text-align:center; color:#9aa9b3; margin:18px 0; position:relative }
+        .use-location-btn { display:flex; gap:8px; align-items:center; justify-content:center; width:100%; padding:12px; border-radius:8px; border:1px solid #dbeffd; background:#f0fbff; cursor:pointer }
+        .use-location-btn[disabled] { opacity:0.6; cursor:not-allowed }
+        .chip { background:#f0fbff; border-radius:999px; padding:8px 14px; border: 1px solid #dbeffd; cursor:pointer; color:#2b5068 }
+        .popular-chips { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap }
+        .chip { background:#f0fbff; border-radius:16px; padding:8px 12px; border: 1px solid #dbeffd; cursor:pointer; color:#2b5068 }
+        .how-it-works { margin-top:26px; background: #f5fffb; border: 1px solid #e1f6e9; padding:18px; border-radius:10px; color:#2b6b4b }
+
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 18px;
+            border: 2px solid var(--light-color);
+            border-radius: 50px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box:focus {
+            border-color: var(--primary-color);
+        }
+
+        .location-btn {
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Recommendations Screen */
+        .recommendations-screen {
+            padding: 40px 20px;
+        }
+
+        .city-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .city-name {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .weather-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            min-width: 120px;
+        }
+
+        .weather-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .weather-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .fruit-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .fruit-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .fruit-card-header {
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fruit-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .suitability-score {
+            background: white;
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .fruit-card-body {
+            padding: 15px;
+        }
+
+        .fruit-property {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .property-name {
+            font-weight: 500;
+        }
+
+        .property-value {
+            color: #666;
+        }
+
+        /* Calculator Screen */
+        .calculator-screen {
+            padding: 40px 20px;
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            background: white;
+        }
+
+        .power-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .power-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .power-label {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .installation-details {
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .devices-list {
+            margin-top: 30px;
+        }
+
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .device-info {
+            flex: 1;
+        }
+
+        .device-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .device-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .device-power {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 15px;
+        }
+
+        .device-runtime {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* keep small logo as a corner mark */
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 18px auto 0 auto;
+            background-color: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            color: #fff;
+            z-index: 2;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* CTA style for hero welcome button in combination with existing .btn */
+        .welcome-screen .btn {
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-weight: 700;
+            z-index: 2;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tagline {
+                font-size: 22px;
+            }
+            
+            .fruit-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .weather-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-title { font-size: 42px; }
+            .hero-desc { max-width: 90%; }
+            .hero-cards-container { flex-direction: column; align-items:center }
+            .hero-card { width: calc(100% - 40px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="hero-blob"></div>
+        <div class="logo">🌱</div>
+        <h1 class="hero-title">Biophotonix</h1>
+        <div class="hero-subtitle">Harnessing Nature's Energy, One Fruit at a Time</div>
+        <p class="hero-desc">Discover the future of sustainable energy with fruit-based biophotovoltaic solar panels. Get personalized recommendations based on your climate and power needs.</p>
+        <button id="get-started-btn" class="btn hero-cta">Get Started</button>
+        <div class="hero-cards-container container">
+            <div class="hero-card">
+                <div class="hero-card-icon">🌍</div>
+                <h3>Climate Smart</h3>
+                <p>Optimized for your location</p>
+            </div>
+            <div class="hero-card">
+                <div class="hero-card-icon">🍊</div>
+                <h3>Fruit Powered</h3>
+                <p>Natural electrolytes</p>
+            </div>
+            <div class="hero-card">
+                <div class="hero-card-icon">⚡</div>
+                <h3>Real-Time Data</h3>
+                <p>Weather-based predictions</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- City Input Screen (Hidden Initially) -->
+    <div id="city-input-screen" class="city-input-screen" style="display: none;">
+        <div class="city-panel">
+            <h1 class="city-title">Where are you located?</h1>
+            <div class="city-subtitle">We'll recommend the best fruit electrolytes for your climate</div>
+            <div class="search-row">
+                <input type="text" id="city-input" class="search-input" placeholder="Enter city name (e.g., London, Miami, Tokyo)...">
+                <button id="find-fruits-btn" class="search-btn">Search</button>
+            </div>
+            <div class="or-divider">or</div>
+            <button id="use-location" class="use-location-btn"><span>📍</span> Use my current location</button>
+            <div class="popular-chips" style="margin-top:18px;">
+                <button class="chip" onclick="setCityAndSearch('London')">London</button>
+                <button class="chip" onclick="setCityAndSearch('Miami')">Miami</button>
+                <button class="chip" onclick="setCityAndSearch('New York')">New York</button>
+                <button class="chip" onclick="setCityAndSearch('Tokyo')">Tokyo</button>
+                <button class="chip" onclick="setCityAndSearch('Sydney')">Sydney</button>
+                <button class="chip" onclick="setCityAndSearch('Seattle')">Seattle</button>
+            </div>
+            <div class="how-it-works"> 
+                <strong>How it works</strong>
+                <ul style="margin-top:10px; padding-left:18px;">
+                    <li>We analyze your local climate conditions</li>
+                    <li>Recommend climate-optimized fruit electrolytes</li>
+                    <li>Calculate power generation based on UV exposure</li>
+                    <li>Provide cost estimates in your local currency</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Screen (Hidden Initially) -->
+    <div id="recommendations-screen" class="recommendations-screen" style="display: none;">
+        <div class="container">
+                    <div class="navigation">
+                        <div class="nav-brand">Biophotonix</div>
+                        <div style="display:flex; align-items:center; gap:20px;">
+                            <div id="provider-status" style="font-size:14px; color:#666;">Provider status: fetching...</div>
+                            <div id="provider-warning" style="font-size:13px; color:#c0392b; display:none;">Warning</div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link" id="back-to-city">Change Location</a>
+                            </div>
+                        </div>
+                    </div>
+            
+            <div class="city-header">
+                <h1 class="city-name" id="current-city">London</h1>
+                <p id="data-source">Data source: Mock</p>
+                <p>Optimal fruit recommendations for your climate</p>
+            </div>
+            
+            <div class="weather-info" id="weather-info">
+                <!-- Weather data will be populated by JavaScript -->
+            </div>
+            
+            <div class="fruit-cards" id="fruit-cards">
+                <!-- Fruit cards will be populated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center;">
+                <button id="proceed-to-calculator" class="btn">Proceed to System Calculator</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Screen (Hidden Initially) -->
+    <div id="calculator-screen" class="calculator-screen" style="display: none;">
+        <div class="container">
+            <div class="navigation">
+                            <div class="nav-brand">Biophotonix</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link" id="back-to-recommendations">Change Fruit</a>
+                </div>
+            </div>
+            
+            <div class="calculator-header">
+                <h1>System Calculator</h1>
+                <p>Calculate power output and installation requirements</p>
+            </div>
+            
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <div class="card">
+                        <h2>System Configuration</h2>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Location</label>
+                            <input type="text" id="calc-city" class="input-field" value="London" readonly>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Selected Fruit</label>
+                            <select id="calc-fruit" class="select-field">
+                                <option value="beetroot">Beetroot</option>
+                                <option value="orange">Orange</option>
+                                <option value="blueberry">Blueberry</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Panel Size (sq ft)</label>
+                            <input type="number" id="panel-size" class="input-field" value="2" min="0.5" max="50" step="0.5">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Device Category</label>
+                            <select id="device-category" class="select-field">
+                                <option value="small">Small Devices (&lt;5W)</option>
+                                <option value="medium">Medium Devices (5-50W)</option>
+                                <option value="large">Large Devices (50-500W)</option>
+                            </select>
+                        </div>
+                        
+                        <button id="calculate-btn" class="btn" style="width: 100%;">Calculate System</button>
+                    </div>
+                </div>
+                
+                <div class="results-section">
+                    <div class="power-display">
+                        <div class="power-value" id="power-output">0.0W</div>
+                        <div class="power-label" id="power-status">Calculating...</div>
+                    </div>
+                    
+                    <div class="card installation-details">
+                        <h2>Installation Requirements</h2>
+                        <div id="installation-details">
+                            <!-- Installation details will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2>Compatible Devices</h2>
+                        <div class="devices-list" id="compatible-devices">
+                            <!-- Compatible devices will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const cityInputScreen = document.getElementById('city-input-screen');
+        const recommendationsScreen = document.getElementById('recommendations-screen');
+        const calculatorScreen = document.getElementById('calculator-screen');
+        
+            const getStartedBtn = document.getElementById('get-started-btn');
+        const cityInput = document.getElementById('city-input');
+        const useLocationBtn = document.getElementById('use-location');
+        const findFruitsBtn = document.getElementById('find-fruits-btn');
+            const liveToggle = document.getElementById('live-toggle');
+        const backToCityBtn = document.getElementById('back-to-city');
+        const proceedToCalculatorBtn = document.getElementById('proceed-to-calculator');
+        const backToRecommendationsBtn = document.getElementById('back-to-recommendations');
+        const calculateBtn = document.getElementById('calculate-btn');
+        
+        const currentCityElement = document.getElementById('current-city');
+        const dataSourceElement = document.getElementById('data-source');
+        const weatherInfoElement = document.getElementById('weather-info');
+        const fruitCardsElement = document.getElementById('fruit-cards');
+        
+        const calcCityElement = document.getElementById('calc-city');
+        const calcFruitElement = document.getElementById('calc-fruit');
+        const panelSizeElement = document.getElementById('panel-size');
+        const deviceCategoryElement = document.getElementById('device-category');
+        const powerOutputElement = document.getElementById('power-output');
+        const powerStatusElement = document.getElementById('power-status');
+        const installationDetailsElement = document.getElementById('installation-details');
+        const compatibleDevicesElement = document.getElementById('compatible-devices');
+        
+        // Current application state
+        let currentCity = 'London';
+        let currentFruit = 'beetroot';
+        let currentPanelSize = 2;
+        let currentDeviceCategory = 'small';
+        
+        // Event Listeners
+        getStartedBtn.addEventListener('click', () => {
+            welcomeScreen.style.display = 'none';
+            cityInputScreen.style.display = 'flex';
+        });
+        
+        backToCityBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            recommendationsScreen.style.display = 'none';
+            cityInputScreen.style.display = 'flex';
+        });
+        
+        backToRecommendationsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            calculatorScreen.style.display = 'none';
+            recommendationsScreen.style.display = 'block';
+        });
+        
+        useLocationBtn.addEventListener('click', async () => {
+            // provide UX feedback while retrieving location
+            try {
+                useLocationBtn.disabled = true;
+                const oldLabel = useLocationBtn.innerHTML;
+                useLocationBtn.innerHTML = '⏳ Locating...';
+
+                if (!navigator.geolocation) {
+                    alert('Geolocation is not supported by your browser.');
+                    return;
+                }
+
+                await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000 });
+                }).then(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    // Call our API to reverse geocode coordinates to a city
+                    try {
+                        const resp = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
+                        const data = await resp.json();
+                        if (data.city) {
+                            cityInput.value = data.city;
+                            currentCity = data.city;
+                            const geoMockParam = liveToggle && !liveToggle.checked ? 'true' : 'false';
+                            loadRecommendations(data.city, geoMockParam);
+                        } else {
+                            // city not found; let user know and set label; do not auto-search
+                            cityInput.value = 'Your Location';
+                            currentCity = 'Your Location';
+                            alert('Could not get a city name from geolocation. Please enter your city manually.');
+                        }
+                    } catch (err) {
+                        console.error('Reverse geocode failed', err);
+                        alert('Unable to get location details. Please enter your city manually.');
+                    }
+                }).catch(err => {
+                    console.warn('Geolocation error', err);
+                    alert('Unable to retrieve your location. Please enter your city manually.');
+                });
+            } finally {
+                useLocationBtn.disabled = false;
+                useLocationBtn.innerHTML = '📍 Use my current location';
+            }
+        });
+        
+        findFruitsBtn.addEventListener('click', () => {
+            const city = cityInput.value.trim();
+            if (city) {
+                currentCity = city;
+                const mockParam = liveToggle && !liveToggle.checked ? 'true' : 'false';
+                loadRecommendations(city, mockParam);
+            } else {
+                alert('Please enter a city name');
+            }
+        });
+
+        // helper called by chips
+        function setCityAndSearch(city) {
+            cityInput.value = city;
+            findFruitsBtn.click();
+        }
+        
+        proceedToCalculatorBtn.addEventListener('click', () => {
+            recommendationsScreen.style.display = 'none';
+            calculatorScreen.style.display = 'block';
+            updateCalculator();
+        });
+        
+        calculateBtn.addEventListener('click', () => {
+            updateCalculator();
+        });
+
+        // Clear cache UI removed — no action here
+        
+        // Load recommendations for a city
+        async function loadRecommendations(city, mockParam = 'false') {
+            cityInputScreen.style.display = 'none';
+            recommendationsScreen.style.display = 'block';
+            
+            currentCityElement.textContent = city;
+            calcCityElement.value = city;
+            
+            // Show loading state
+            weatherInfoElement.innerHTML = '<div class="loading"></div> Loading weather data...';
+            fruitCardsElement.innerHTML = '<div class="loading"></div> Loading fruit recommendations...';
+            
+            try {
+                const response = await fetch(`/api/recommendations/${encodeURIComponent(city)}?mock=${encodeURIComponent(mockParam)}`);
+                const data = await response.json();
+                console.log('recommendations response', data);
+                
+                displayWeatherData(data.weather);
+                // Show a warning if user wanted live data but the provider returned mock data
+                try {
+                    const wantMock = (mockParam === 'true');
+                    const provider = (data.weather && data.weather.provider) ? data.weather.provider : 'mock';
+                    const pw = document.getElementById('provider-warning');
+                    if (!pw) return;
+                    if (!wantMock && provider === 'mock') {
+                        pw.style.display = 'block';
+                        pw.textContent = 'Live weather provider unavailable; using mock data.';
+                    } else {
+                        pw.style.display = 'none';
+                    }
+                } catch (err) {
+                    console.error('Failed to check provider/warning', err);
+                }
+                displayFruitRecommendations(data.recommendations);
+            } catch (error) {
+                console.error('Error loading recommendations:', error);
+                weatherInfoElement.innerHTML = '<p>Error loading weather data</p>';
+                fruitCardsElement.innerHTML = '<p>Error loading fruit recommendations</p>';
+            }
+        }
+        
+        // Display weather data
+        function displayWeatherData(weather) {
+            weatherInfoElement.innerHTML = `
+                <div class="weather-item">
+                    <div class="weather-value">${weather.temperature}°C</div>
+                    <div class="weather-label">Temperature</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-value">${weather.humidity}%</div>
+                    <div class="weather-label">Humidity</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-value">${(weather.cloud_cover === null || weather.cloud_cover === undefined) ? 'N/A' : weather.cloud_cover + '%'} </div>
+                    <div class="weather-label">Cloud Cover</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-value">${(weather.uv_index === null || weather.uv_index === undefined) ? 'N/A' : weather.uv_index}</div>
+                    <div class="weather-label">UV Index</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-value">${weather.climate_zone}</div>
+                    <div class="weather-label">Climate Zone</div>
+                </div>
+            `;
+            // Display data source of weather
+            try {
+                const provider = weather.provider || 'mock';
+                if (provider === 'openweathermap') {
+                    dataSourceElement.textContent = 'Data source: Live (OpenWeatherMap)';
+                } else if (provider === 'weatherapi') {
+                    dataSourceElement.textContent = 'Data source: Live (WeatherAPI)';
+                } else {
+                    dataSourceElement.textContent = 'Data source: Mock';
+                }
+            } catch (e) {
+                dataSourceElement.textContent = 'Data source: Unknown';
+            }
+        }
+        
+        // Display fruit recommendations
+        function displayFruitRecommendations(fruits) {
+            fruitCardsElement.innerHTML = '';
+            
+            fruits.forEach(fruit => {
+                const card = document.createElement('div');
+                card.className = 'fruit-card';
+                card.innerHTML = `
+                    <div class="fruit-card-header">
+                        <div class="fruit-name">${fruit.name}</div>
+                        <div class="suitability-score">${fruit.suitability_score}%</div>
+                    </div>
+                    <div class="fruit-card-body">
+                        <div class="fruit-property">
+                            <span class="property-name">Scientific Name</span>
+                            <span class="property-value">${fruit.scientific_name}</span>
+                        </div>
+                        <div class="fruit-property">
+                            <span class="property-name">pH Level</span>
+                            <span class="property-value">${fruit.ph_level}</span>
+                        </div>
+                        <div class="fruit-property">
+                            <span class="property-name">Acidity</span>
+                            <span class="property-value">${fruit.acidity}</span>
+                        </div>
+                        <div class="fruit-property">
+                            <span class="property-name">Cost per kg</span>
+                            <span class="property-value">$${fruit.cost_per_kg}</span>
+                        </div>
+                        <div class="fruit-property">
+                            <span class="property-name">Climate Specialization</span>
+                            <span class="property-value">${fruit.climate_specialization}</span>
+                        </div>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" 
+                                onclick="selectFruit('${fruit.name.toLowerCase()}')">
+                            Select This Fruit
+                        </button>
+                    </div>
+                `;
+                fruitCardsElement.appendChild(card);
+            });
+
+            // Default the calculator's selected fruit to the top recommendation
+            try {
+                if (Array.isArray(fruits) && fruits.length > 0) {
+                    const topName = fruits[0].name;
+                    const topVal = topName.toLowerCase();
+                    // If the select does not already contain this option, add it
+                    if (!Array.from(calcFruitElement.options).some(o => o.value === topVal)) {
+                        const opt = document.createElement('option');
+                        opt.value = topVal;
+                        opt.textContent = topName;
+                        calcFruitElement.appendChild(opt);
+                    }
+                    // Select it and update the current fruit
+                    calcFruitElement.value = topVal;
+                    currentFruit = topVal;
+                }
+            } catch (err) {
+                console.warn('Could not default-select top recommendation', err);
+            }
+        }
+        
+        // Select a fruit for the calculator
+        function selectFruit(fruit) {
+            currentFruit = fruit;
+            calcFruitElement.value = fruit;
+            recommendationsScreen.style.display = 'none';
+            calculatorScreen.style.display = 'block';
+            updateCalculator();
+        }
+        
+        // Update calculator with current values
+        async function updateCalculator() {
+            currentCity = calcCityElement.value;
+            currentFruit = calcFruitElement.value;
+            currentPanelSize = parseFloat(panelSizeElement.value);
+            currentDeviceCategory = deviceCategoryElement.value;
+            
+            // Show loading state
+            powerOutputElement.textContent = '...';
+            powerStatusElement.textContent = 'Calculating...';
+            installationDetailsElement.innerHTML = '<div class="loading"></div> Calculating installation requirements...';
+            compatibleDevicesElement.innerHTML = '<div class="loading"></div> Finding compatible devices...';
+            
+            try {
+                const useMock = liveToggle && !liveToggle.checked;
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        city: currentCity,
+                        fruit: currentFruit,
+                        panel_size: currentPanelSize,
+                        mock: useMock
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Update power output
+                powerOutputElement.textContent = `${data.power_output.current_power}W`;
+                powerStatusElement.textContent = `Status: ${data.power_output.activation_status}`;
+
+                // If user asked for live data but call fell back to mock, show a warning
+                try {
+                    const provider = (data.weather && data.weather.provider) ? data.weather.provider : 'mock';
+                    const pw = document.getElementById('provider-warning');
+                    if (!pw) return;
+                    if (!useMock && provider === 'mock') {
+                        pw.style.display = 'block';
+                        pw.textContent = 'Live weather provider unavailable; using mock data.';
+                    } else {
+                        pw.style.display = 'none';
+                    }
+                } catch (err) {
+                    console.error('Failed to detect provider mismatch', err);
+                }
+                
+                // Update installation details
+                installationDetailsElement.innerHTML = `
+                    <div class="detail-item">
+                        <span>Juice Required:</span>
+                        <span>${data.installation.juice_required_ml} ml</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Resin Required:</span>
+                        <span>${data.installation.resin_required_ml} ml</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Installation Cost:</span>
+                        <span>$${data.installation.installation_cost}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Curing Time:</span>
+                        <span>${data.installation.curing_time_hours} hours</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Complexity:</span>
+                        <span>${data.installation.complexity}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Lifespan:</span>
+                        <span>${data.installation.lifespan_months} months</span>
+                    </div>
+                `;
+                
+                // Update compatible devices (mock data for demonstration)
+                updateCompatibleDevices(data.power_output.current_power);
+                
+            } catch (error) {
+                console.error('Error calculating system:', error);
+                powerOutputElement.textContent = 'Error';
+                powerStatusElement.textContent = 'Calculation failed';
+                installationDetailsElement.innerHTML = '<p>Error calculating installation requirements</p>';
+                compatibleDevicesElement.innerHTML = '<p>Error finding compatible devices</p>';
+            }
+        }
+        
+        // Update compatible devices list (mock implementation)
+        function updateCompatibleDevices(powerOutput) {
+            // Mock device data based on power output
+            let devices = [];
+            
+            if (powerOutput < 5) {
+                devices = [
+                    { name: 'LED Light Bulb', power: 3, description: 'Energy-efficient lighting', runtime: 8 },
+                    { name: 'Phone Charger', power: 5, description: 'Smartphone charging', runtime: 4.8 },
+                    { name: 'USB Fan', power: 4, description: 'Personal cooling', runtime: 6 },
+                    { name: 'Bluetooth Speaker', power: 2, description: 'Portable audio', runtime: 12 }
+                ];
+            } else if (powerOutput < 50) {
+                devices = [
+                    { name: 'Laptop Charger', power: 45, description: 'Computer power supply', runtime: 1.1 },
+                    { name: 'Tablet Charger', power: 25, description: 'Tablet charging', runtime: 2 },
+                    { name: 'Small Router', power: 15, description: 'Internet connectivity', runtime: 3.3 },
+                    { name: 'LED TV Strip', power: 30, description: 'Ambient lighting', runtime: 1.7 }
+                ];
+            } else {
+                devices = [
+                    { name: 'Desktop Computer', power: 300, description: 'Workstation/gaming PC', runtime: 0.2 },
+                    { name: 'Gaming Console', power: 200, description: 'Entertainment system', runtime: 0.3 },
+                    { name: 'Mini Fridge', power: 150, description: 'Compact cooling', runtime: 0.4 },
+                    { name: 'Large Monitor', power: 60, description: 'Display screen', runtime: 1 }
+                ];
+            }
+            
+            // Filter devices that can be powered
+            const compatible = devices.filter(device => device.power <= powerOutput);
+            
+            // Update UI
+            compatibleDevicesElement.innerHTML = '';
+            
+            if (compatible.length === 0) {
+                compatibleDevicesElement.innerHTML = '<p>No compatible devices found for this power output.</p>';
+                return;
+            }
+            
+            compatible.forEach(device => {
+                const deviceElement = document.createElement('div');
+                deviceElement.className = 'device-item';
+                deviceElement.innerHTML = `
+                    <div class="device-info">
+                        <div class="device-name">${device.name}</div>
+                        <div class="device-description">${device.description}</div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="device-power">${device.power}W</div>
+                        <div class="device-runtime">~${device.runtime}h/day</div>
+                    </div>
+                `;
+                compatibleDevicesElement.appendChild(deviceElement);
+            });
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up initial state and fetch provider debug info
+            fetch('/api/debug').then(r => r.json()).then(data => {
+                const ps = document.getElementById('provider-status');
+                if (!ps) return;
+                const open = data.openweathermap_key_valid ? 'OpenWeather (OK)' : (data.openweathermap_key_present ? 'OpenWeather (Key invalid)' : 'OpenWeather (No key)');
+                const wa = data.weatherapi_key_valid ? 'WeatherAPI (OK)' : (data.weatherapi_key_present ? 'WeatherAPI (Key invalid)' : 'WeatherAPI (No key)');
+                const mode = data.use_mock ? 'Using Mock Data' : 'Using Live Data (if keys valid)';
+                ps.textContent = `${open} | ${wa} — ${mode}`;
+            }).catch(err => {
+                console.error('Failed to fetch provider debug', err);
+            });
+        });
+    </script>
+</body>
+</html>

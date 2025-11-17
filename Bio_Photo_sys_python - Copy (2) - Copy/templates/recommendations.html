@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations - {{ city }}</title>
+</head>
+<body>
+    <h1>Fruit Recommendations for {{ city }}</h1>
+    <h2>Weather</h2>
+    <p>Data source: {{ weather.provider if weather.provider is defined else 'mock' }}</p>
+    <ul>
+        <li>Temperature: {{ weather.temperature if weather.temperature is defined else 'N/A' }} °C</li>
+        <li>Humidity: {{ weather.humidity if weather.humidity is defined else 'N/A' }}%</li>
+        <li>Cloud Cover: {{ weather.cloud_cover if weather.cloud_cover is defined else 'N/A' }}%</li>
+        <li>UV Index: {{ weather.uv_index if weather.uv_index is defined else 'N/A' }}</li>
+        <li>Climate Zone: {{ weather.climate_zone if weather.climate_zone is defined else 'N/A' }}</li>
+    </ul>
+
+    <h2>Top Fruits</h2>
+    <ul>
+    {% for fruit in fruits %}
+        <li>
+            <strong>{{ fruit.name }}</strong> - Suitability: {{ fruit.suitability_score }}%<br>
+            pH: {{ fruit.ph_level }}, Cost per kg: ${{ fruit.cost_per_kg }}, Specialization: {{ fruit.climate_specialization }}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="/">Back to home</a>
+</body>
+</html>

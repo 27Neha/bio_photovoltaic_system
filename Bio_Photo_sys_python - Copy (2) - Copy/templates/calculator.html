@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Calculator - {{ city }}</title>
+</head>
+<body>
+    <h1>System Calculator for {{ city }}</h1>
+    <h2>Configuration</h2>
+    <p>Selected fruit: {{ fruit.name }}</p>
+    <p>Panel size: {{ panel_size }} sq ft</p>
+    <p>Device category: {{ device_category }}</p>
+
+    <h2>Weather</h2>
+    <p>Data source: {{ weather.provider if weather.provider is defined else 'mock' }}</p>
+    <ul>
+      <li>Temperature: {{ weather.temperature if weather.temperature is defined else 'N/A' }} °C</li>
+      <li>Humidity: {{ weather.humidity if weather.humidity is defined else 'N/A' }}%</li>
+      <li>Cloud Cover: {{ weather.cloud_cover if weather.cloud_cover is defined else 'N/A' }}%</li>
+      <li>UV Index: {{ weather.uv_index if weather.uv_index is defined else 'N/A' }}</li>
+      <li>Climate Zone: {{ weather.climate_zone if weather.climate_zone is defined else 'N/A' }}</li>
+    </ul>
+
+    <h2>Power Output</h2>
+    <pre>{{ power | tojson(indent=2) }}</pre>
+
+    <h2>Installation</h2>
+    <pre>{{ installation | tojson(indent=2) }}</pre>
+
+    <h2>Compatible Devices</h2>
+    <ul>
+    {% for d in devices %}
+      <li>{{ d.name }} - {{ d.power }}W - {{ d.runtime_hours }}h/day</li>
+    {% endfor %}
+    </ul>
+
+    <a href="/">Back to home</a>
+</body>
+</html>
